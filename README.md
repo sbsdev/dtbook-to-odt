@@ -2,6 +2,12 @@
 
 A DTBook to ODT converter for the [DAISY Pipeline 2][]
 
+## Build
+
+```sh
+mvn clean package
+```
+
 ## Authors
 - [Bert Frees][] 
 

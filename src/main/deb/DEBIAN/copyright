@@ -1,9 +1,9 @@
 Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: dtbook-to-odt
-Source: https://github.com/sbsdev/sbs-pipeline
+Source: https://github.com/sbsdev/dtbook-to-odt
 
 Files: *
-Copyright: 2013 SBS
+Copyright: 2013 Swiss Library for the Blind, Visually Impaired and Print Disabled
 License: LGPL-3.0+
 
 Files: debian/*

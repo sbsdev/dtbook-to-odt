@@ -28,7 +28,7 @@
   </properties>
   
   <scm>
-    <developerConnection>scm:git:ssh://git@github.com:sbsdev/sbs-pipeline.git</developerConnection>
+    <developerConnection>scm:git:ssh://git@github.com:sbsdev/dtbook-to-odt.git</developerConnection>
   </scm>
 
   <build>

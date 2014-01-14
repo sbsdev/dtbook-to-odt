@@ -6,7 +6,7 @@
     xmlns:sbs="http://www.sbs.ch/pipeline"
     xmlns:c="http://www.w3.org/ns/xproc-step"
     xmlns:odt="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
-	xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0"
+    xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0"
     exclude-inline-prefixes="#all"
     type="sbs:dtbook-to-odt" name="dtbook-to-odt" version="1.0">
     
@@ -71,6 +71,13 @@
         <p:documentation>
             <h2 px:role="name">page-numbers</h2>
             <p px:role="desc">Show page numbers or not.</p>
+        </p:documentation>
+    </p:option>
+    
+    <p:option name="page-numbers-float" required="false" px:type="boolean" select="'true'">
+        <p:documentation>
+            <h2 px:role="name">page-numbers-float</h2>
+            <p px:role="desc">Try to float page numbers to an appropriate place as opposed to exactly following print.</p>
         </p:documentation>
     </p:option>
     
@@ -153,6 +160,7 @@
             <p:with-param port="parameters" name="image_dpi" select="if ($image-dpi='') then '600' else $image-dpi"/>
             <p:with-param port="parameters" name="answer" select="if ($answer='') then '_..' else $answer"/>
             <p:with-param port="parameters" name="page_numbers" select="$page-numbers"/>
+            <p:with-param port="parameters" name="page_numbers_float" select="$page-numbers-float"/>
             <p:with-param port="parameters" name="line_numbers" select="$line-numbers"/>
             <p:with-param port="parameters" name="phonetics" select="$phonetics"/>
         </px:dtbook-to-odt.convert>

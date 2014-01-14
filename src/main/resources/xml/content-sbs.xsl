@@ -46,6 +46,26 @@
 		<xsl:call-template name="text:empty-p"/>
 	</xsl:template>
 	
+	<!-- ========== -->
+	<!-- PARAGRAPHS -->
+	<!-- ========== -->
+	
+	<xsl:template match="dtb:p[child::dtb:pagenum]" priority="0.59"
+	              mode="office:text office:annotation text:section text:list-item table:table-cell
+	                    text:note-body">
+		<xsl:param name="pagenum_done" as="xs:boolean" select="false()" tunnel="yes"/>
+		<xsl:choose>
+			<xsl:when test="$page_numbers='true' and not($pagenum_done)">
+				<xsl:apply-templates select="$group-inline-nodes" mode="#current">
+					<xsl:with-param name="select" select="*|text()"/>
+				</xsl:apply-templates>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:next-match/>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+	
 	<xsl:template match="dtb:p[child::dtb:span[@class='linenum']]"
 	              mode="office:text office:annotation text:section" priority="0.6">
 		<xsl:choose>

@@ -383,6 +383,7 @@
 			<xsl:with-param name="sequence">
 				<xsl:text/>
 			</xsl:with-param>
+			<xsl:with-param name="paragraph_style" tunnel="yes" select="()"/>
 		</xsl:call-template>
 	</xsl:template>
 	

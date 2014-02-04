@@ -50,6 +50,10 @@
 	<!-- PARAGRAPHS -->
 	<!-- ========== -->
 	
+	<xsl:template match="dtb:p" mode="office:text office:annotation text:section" priority="0.62">
+		<xsl:call-template name="insert-big-notes-after"/>
+	</xsl:template>
+	
 	<xsl:template match="dtb:p[child::dtb:span[@class='linenum']]"
 	              mode="office:text office:annotation text:section" priority="0.61">
 		<xsl:choose>
@@ -86,6 +90,7 @@
 	<!-- ===== -->
 	
 	<xsl:template match="dtb:noteref" mode="text:p text:h text:span" priority="0.6">
+		<xsl:param name="notes_done" as="xs:string*" tunnel="yes"/>
 		<xsl:variable name="id" select="translate(@idref,'#','')"/>
 		<xsl:variable name="asterisk" as="text()?">
 			<xsl:if test="not(starts-with(normalize-space(string(.)), '*'))">
@@ -95,10 +100,12 @@
 		<xsl:call-template name="text:span">
 			<xsl:with-param name="apply-templates" select="($asterisk, *|text())"/>
 		</xsl:call-template>
-		<xsl:text> </xsl:text>
-		<xsl:apply-templates select="dtb:find-note($id)" mode="#current">
-			<xsl:with-param name="skip_notes" select="false()" tunnel="yes"/>
-		</xsl:apply-templates>
+		<xsl:if test="not($id=$notes_done)">
+			<xsl:text> </xsl:text>
+			<xsl:apply-templates select="dtb:find-note($id)" mode="#current">
+				<xsl:with-param name="skip_notes" select="false()" tunnel="yes"/>
+			</xsl:apply-templates>
+		</xsl:if>
 	</xsl:template>
 	
 	<xsl:template match="dtb:annoref" mode="text:p text:h text:span" priority="0.6">
@@ -116,35 +123,41 @@
 	</xsl:template>
 	
 	<xsl:template match="dtb:note|dtb:annotation" mode="text:p text:h text:span" priority="0.6">
-		<xsl:param name="skip_notes" as="xs:boolean" select="true()" tunnel="yes"/>
-		<xsl:choose>
-			<xsl:when test="not($skip_notes)">
-				<xsl:variable name="open_bracket" as="text()">
-					<xsl:text>(</xsl:text>
-				</xsl:variable>
-				<xsl:variable name="asterisk" as="text()?">
-					<xsl:if test="not(starts-with(normalize-space(string(.)), '*'))">
-						<xsl:text>*</xsl:text>
-					</xsl:if>
-				</xsl:variable>
-				<xsl:variable name="close_bracket" as="text()">
-					<xsl:text>)</xsl:text>
-				</xsl:variable>
-				<xsl:call-template name="text:span">
-					<xsl:with-param name="skip_notes" select="true()" tunnel="yes"/>
-					<xsl:with-param name="apply-templates" select="($open_bracket, $asterisk, *|text(), $close_bracket)"/>
-				</xsl:call-template>
-			</xsl:when>
-			<xsl:otherwise>
-				<xsl:next-match/>
-			</xsl:otherwise>
-		</xsl:choose>
+		<xsl:param name="note_prefix" as="node()*" tunnel="yes"/>
+		<xsl:param name="note_suffix" as="node()*" tunnel="yes"/>
+		<xsl:call-template name="text:span">
+			<xsl:with-param name="skip_notes" select="true()" tunnel="yes"/>
+			<xsl:with-param name="apply-templates" select="($note_prefix, *|text(), $note_suffix)"/>
+		</xsl:call-template>
 	</xsl:template>
 	
+	<xsl:template match="dtb:note|dtb:annotation" mode="office:text office:annotation text:section" priority="0.6">
+		<xsl:param name="note_prefix" as="node()*" tunnel="yes"/>
+		<xsl:param name="note_suffix" as="node()*" tunnel="yes"/>
+		<xsl:apply-templates select="$group-inline-nodes" mode="#current">
+			<xsl:with-param name="skip_notes" select="true()" tunnel="yes"/>
+			<xsl:with-param name="select" select="($note_prefix, *|text(), $note_suffix)"/>
+		</xsl:apply-templates>
+	</xsl:template>
+	
+	<xsl:template match="dtb:note|dtb:annotation" priority="0.61"
+	              mode="text:p text:h text:span office:text office:annotation text:section">
+		<xsl:next-match>
+			<xsl:with-param name="note_prefix" tunnel="yes" as="node()*">
+				<xsl:text>(</xsl:text>
+				<xsl:if test="not(starts-with(normalize-space(string(.)), '*'))">
+					<xsl:text>*</xsl:text>
+				</xsl:if>
+			</xsl:with-param>
+			<xsl:with-param name="note_suffix" tunnel="yes" as="node()*">
+				<xsl:text>)</xsl:text>
+			</xsl:with-param>
+		</xsl:next-match>
+	</xsl:template>
 	
 	<xsl:template match="dtb:note/dtb:p|dtb:annotation/dtb:p" as="xs:boolean" mode="is-block-element"
 	              priority="0.6">
-		<xsl:sequence select="false()"/>
+		<xsl:sequence select="not(normalize-space(string(.))=normalize-space(string(parent::*)))"/>
 	</xsl:template>
 	
 	<xsl:template match="dtb:annotation/dtb:p|dtb:note/dtb:p" mode="text:p text:h text:span" priority="0.7">
@@ -161,6 +174,25 @@
 		</xsl:choose>
 	</xsl:template>
 	
+	<xsl:template name="insert-big-notes-after">
+		<xsl:param name="notes_done" as="xs:string*" tunnel="yes"/>
+		<xsl:variable name="notes_too_big" as="element()*"
+		              select="(for $id in .//dtb:noteref/translate(@idref,'#','')[not(.=$notes_done)]
+		                        return dtb:find-note($id)
+		                      )[descendant::*[f:is-block-element(.)]]
+		                      |
+		                      (for $id in .//dtb:annoref/translate(@idref,'#','')[not(.=$notes_done)]
+		                        return dtb:find-annotation($id)
+		                      )[descendant::*[f:is-block-element(.)]]"/>
+		<xsl:next-match>
+			<xsl:with-param name="notes_done" select="($notes_done, $notes_too_big/string(@id))" tunnel="yes"/>
+		</xsl:next-match>
+		<xsl:apply-templates select="$notes_too_big" mode="#current">
+			<xsl:with-param name="skip_notes" select="false()" tunnel="yes"/>
+			<xsl:with-param name="notes_done" select="($notes_done, $notes_too_big/string(@id))" tunnel="yes"/>
+		</xsl:apply-templates>
+	</xsl:template>
+
 	<!-- ====== -->
 	<!-- IMAGES -->
 	<!-- ====== -->

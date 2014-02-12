@@ -53,7 +53,7 @@
         </p:documentation>
     </p:option>
     
-    <p:option name="phonetics" required="false" px:type="boolean" select="true()">
+    <p:option name="phonetics" required="false" px:type="boolean" select="'true'">
         <p:documentation>
             <h2 px:role="name">phonetics</h2>
             <p px:role="desc">Render phonetics or not.</p>

@@ -20,7 +20,6 @@
   <name>DAISY Pipeline 2 module :: sbs:dtbook-to-odt</name>
   
   <properties>
-    <pipeline.version>1.8</pipeline.version>
     <dtbook-to-odt.version>1.0.0-SNAPSHOT</dtbook-to-odt.version>
     <!--
 	this needs to match the version in script-utils-aggregator
@@ -28,78 +27,6 @@
     <odt-utils.version>1.0.0</odt-utils.version>
     <tagNameFormat>v@{project.version}</tagNameFormat>
   </properties>
-  
-  <!--
-      TODO: this belongs in modules-parent
-  -->
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-	<groupId>org.daisy.pipeline</groupId>
-	<artifactId>framework-bom</artifactId>
-	<version>${pipeline.version}</version>
-	<type>pom</type>
-	<scope>import</scope>
-      </dependency>
-      <dependency>
-	<groupId>org.daisy.pipeline.modules</groupId>
-	<artifactId>common-utils-aggregator</artifactId>
-	<version>${pipeline.version}</version>
-	<type>pom</type>
-	<scope>import</scope>
-      </dependency>
-      <dependency>
-	<groupId>org.daisy.pipeline.modules</groupId>
-	<artifactId>scripts-aggregator</artifactId>
-	<version>${pipeline.version}</version>
-	<type>pom</type>
-	<scope>import</scope>
-      </dependency>
-      <dependency>
-	<groupId>org.daisy.pipeline.modules</groupId>
-	<artifactId>script-utils-aggregator</artifactId>
-	<version>${pipeline.version}</version>
-	<type>pom</type>
-	<scope>import</scope>
-      </dependency>
-      <dependency>
-	<groupId>org.daisy.xprocspec</groupId>
-	<artifactId>xprocspec</artifactId>
-	<version>1.1.0</version>
-	<scope>test</scope>
-      </dependency>
-      <dependency>
-	<groupId>org.daisy.maven</groupId>
-	<artifactId>xprocspec-runner</artifactId>
-	<version>1.0.0</version>
-	<scope>test</scope>
-	<exclusions>
-	  <exclusion>
-	    <groupId>com.google.guava</groupId>
-	    <artifactId>guava</artifactId>
-	  </exclusion>
-	</exclusions>
-      </dependency>
-      <dependency>
-	<groupId>org.daisy.maven</groupId>
-	<artifactId>xproc-engine-daisy-pipeline</artifactId>
-	<version>1.8.1-SNAPSHOT</version>
-	<scope>test</scope>
-	<exclusions>
-	  <exclusion>
-	    <groupId>org.slf4j</groupId>
-	    <artifactId>slf4j-jdk14</artifactId>
-	  </exclusion>
-	</exclusions>
-      </dependency>
-      <dependency>
-	<groupId>org.daisy.pipeline</groupId>
-	<artifactId>pax-exam-helper</artifactId>
-	<version>1.8-SNAPSHOT</version>
-	<scope>test</scope>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
   
   <dependencies>
     <dependency>

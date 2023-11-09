@@ -19,11 +19,6 @@
   <name>DAISY Pipeline 2 module :: sbs:dtbook-to-odt</name>
   
   <properties>
-    <dtbook-to-odt.version>1.0.0-SNAPSHOT</dtbook-to-odt.version>
-    <!--
-	this needs to match the version in script-utils-aggregator
-    -->
-    <odt-utils.version>1.0.0</odt-utils.version>
     <tagNameFormat>v@{project.version}</tagNameFormat>
   </properties>
   
@@ -31,13 +26,6 @@
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>dtbook-to-odt</artifactId>
-      <version>${dtbook-to-odt.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>odt-utils</artifactId>
-      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
@@ -100,24 +88,8 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.daisy.xprocspec</groupId>
-      <artifactId>xprocspec</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.maven</groupId>
-      <artifactId>xprocspec-runner</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-jdk14</artifactId>
-      <version>1.7.2</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>pax-exam-helper</artifactId>
+      <groupId>org.daisy.pipeline.build</groupId>
+      <artifactId>modules-test-helper</artifactId>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -173,106 +145,6 @@
 	    </configuration>
 	  </execution>
 	</executions>
-      </plugin>
-      <plugin>
-	<artifactId>maven-resources-plugin</artifactId>
-	<executions>
-	  <execution>
-	    <id>filter-resources</id>
-	    <phase>process-resources</phase>
-	    <goals>
-	      <goal>copy-resources</goal>
-	    </goals>
-	    <configuration>
-	      <outputDirectory>target/generated-resources</outputDirectory>
-	      <resources>
-		<resource>
-		  <directory>src/main/resources</directory>
-		  <includes>
-		    <include>xml/dtbook-to-odt.xpl</include>
-		  </includes>
-		  <filtering>true</filtering>
-		</resource>
-	      </resources>
-	      <filters>
-		<filter>target/filters/detailed-version.properties</filter>
-	      </filters>
-	    </configuration>
-	  </execution>
-	</executions>
-      </plugin>
-      <plugin>
-	<groupId>org.ops4j.pax.exam</groupId>
-	<artifactId>maven-paxexam-plugin</artifactId>
-	<executions>
-	  <execution>
-	    <id>generate-depends-file</id>
-	    <goals>
-	      <goal>generate-depends-file</goal>
-	    </goals>
-	  </execution>
-	</executions>
-      </plugin>
-      <plugin>
-	<artifactId>maven-dependency-plugin</artifactId>
-	<executions>
-	  <execution>
-	    <id>copy-dependencies</id>
-	    <phase>prepare-package</phase>
-	    <goals>
-	      <goal>copy</goal>
-	    </goals>
-	    <configuration>
-	      <useBaseVersion>true</useBaseVersion>
-	      <prependGroupId>true</prependGroupId>
-	      <artifactItems>
-		<artifactItem>
-		  <groupId>org.daisy.pipeline.modules</groupId>
-		  <artifactId>dtbook-to-odt</artifactId>
-		</artifactItem>
-		<artifactItem>
-		  <groupId>org.daisy.pipeline.modules</groupId>
-		  <artifactId>odt-utils</artifactId>
-		</artifactItem>
-	      </artifactItems>
-	    </configuration>
-	  </execution>
-	</executions>
-      </plugin>
-      <plugin>
-	<groupId>org.vafer</groupId>
-	<artifactId>jdeb</artifactId>
-	<configuration>
-	  <dataSet>
-	    <data>
-	      <type>file</type>
-	      <src>target/${project.artifactId}-${project.version}.jar</src>
-	      <mapper>
-		<type>perm</type>
-		<prefix>/opt/daisy-pipeline2/modules</prefix>
-	      </mapper>
-	    </data>
-	    <data>
-	      <type>file</type>
-	      <src>target/dependency/org.daisy.pipeline.modules.dtbook-to-odt-${dtbook-to-odt.version}.jar</src>
-	      <mapper>
-		<type>perm</type>
-		<prefix>/opt/daisy-pipeline2/modules</prefix>
-	      </mapper>
-	    </data>
-	    <!--
-		odt-utils is not in pipeline-assembly 1.8 yet
-	    -->
-	    <data>
-	      <type>file</type>
-	      <src>target/dependency/org.daisy.pipeline.modules.odt-utils-${odt-utils.version}.jar</src>
-	      <mapper>
-		<type>perm</type>
-		<prefix>/opt/daisy-pipeline2/modules</prefix>
-	      </mapper>
-	    </data>
-	  </dataSet>
-	</configuration>
       </plugin>
     </plugins>
   </build>

@@ -8,7 +8,7 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.14.15</version>
+    <version>1.14.17</version>
   </parent>
   
   <groupId>ch.sbs.pipeline</groupId>

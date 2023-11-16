@@ -281,7 +281,7 @@
 		</xsl:next-match>
 	</xsl:template>
 	
-	<xsl:template match="dtb:blockquote|dtb:epigraph|dtb:poem" mode="office:text office:annotation text:section"
+	<xsl:template match="dtb:blockquote|dtb:epigraph|dtb:poem" mode="office:text office:annotation text:section text:list-item"
 	              priority="0.6">
 		<xsl:call-template name="text:empty-p"/>
 		<xsl:next-match/>
@@ -337,6 +337,17 @@
 		<xsl:apply-templates mode="#current">
 			<xsl:with-param name="lang" select="f:lang(.)" tunnel="yes"/>
 		</xsl:apply-templates>
+	</xsl:template>
+	
+	<xsl:template match="brl:running-line|brl:toc-line|brl:volume|brl:when-braille|brl:separator|
+	                     brl:select|brl:otherwise"
+	              as="xs:boolean" mode="is-block-element" priority="1">
+		<xsl:sequence select="false()"/>
+	</xsl:template>
+	
+	<xsl:template match="brl:homograph|brl:place|brl:name|brl:v-form|brl:num|brl:emph"
+	              as="xs:boolean" mode="is-block-element">
+		<xsl:sequence select="false()"/>
 	</xsl:template>
 	
 	<!-- ===== -->

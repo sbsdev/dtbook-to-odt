@@ -63,6 +63,11 @@
                 <xsl:sequence select="(1000,1000)"/>
               </xsl:function>
               
+              <xsl:function name="pf:file-exists" as="xs:boolean">
+                <xsl:param name="src" as="xs:string"/>
+                <xsl:sequence select="true()"/>
+              </xsl:function>
+              
             </xsl:stylesheet>
           </p:inline>
         </p:input>
@@ -126,7 +131,7 @@
       <x:document type="inline">
         <wrapper>
           <text:p text:style-name="dtb_3a_p">
-            Du brauchst *
+            Du brauchst*
             <text:span text:style-name="dtb_3a_note">
               ( * brauchen + zu kann nur negativ oder einschränkend verwendet werden. )
             </text:span>
@@ -163,9 +168,9 @@
     <x:expect label="result" type="compare">
       <x:document type="inline">
         <wrapper>
-          <text:p text:style-name="dtb_3a_p">* +</text:p>
+          <text:p text:style-name="dtb_3a_p">*+</text:p>
           <text:p text:style-name="dtb_3a_note_5f_footnote">
-            <text:span text:style-name="dtb_3a_note">( *</text:span>
+            <text:span text:style-name="dtb_3a_note">(*</text:span>
           </text:p>
           <text:p text:style-name="dtb_3a_note_5f_footnote">
             <text:span text:style-name="dtb_3a_note">
@@ -413,6 +418,73 @@
     </x:expect>
   </x:scenario>
   
+  <x:scenario label="blockquote inside li">
+    <x:documentation>
+      See issue https://github.com/daisy/pipeline-scripts/issues/110.
+    </x:documentation>
+    <x:call step="pxi:test-content">
+      <x:input port="source">
+        <x:document type="inline">
+          <wrapper>
+            <list type="pl" depth="1" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+              <li>
+                <p>1 when we say what something is or what it is like:</p>
+                <blockquote id="block_1">
+                  <p>What's that? It's a radio.</p>
+                  <p>My sister drives an expensive German car.</p>
+                </blockquote>
+              </li>
+              <li>
+                <p>2 when we say what somebody's job is:</p>
+                <blockquote id="block_2">
+                  <p>Tom Cruise is a film actor.</p>
+                </blockquote>
+              </li>
+              <li>
+                <p>3 when we describe somebody's features:</p>
+                <blockquote id="block_3">
+                  <p>He's got a long face and a small moustache.</p>
+                </blockquote>
+              </li>
+            </list>
+          </wrapper>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <wrapper xmlns="">
+          <text:p text:style-name="Standard"/>
+          <text:list text:style-name="LFO3">
+            <text:list-item>
+              <text:p text:style-name="dtb_3a_li">1 when we say what something is or what it is like:</text:p>
+              <text:p text:style-name="Standard"/>
+              <text:p text:style-name="dtb_3a_blockquote">What's that? It's a radio.</text:p>
+              <text:p text:style-name="dtb_3a_blockquote">My sister drives an expensive German car.</text:p>
+              <text:p text:style-name="Standard"/>
+            </text:list-item>
+            <text:list-item>
+              <text:p text:style-name="dtb_3a_li">2 when we say what somebody's job is:</text:p>
+              <text:p text:style-name="Standard"/>
+              <text:p text:style-name="dtb_3a_blockquote">Tom Cruise is a film actor.</text:p>
+              <text:p text:style-name="Standard"/>
+            </text:list-item>
+            <text:list-item>
+              <text:p text:style-name="dtb_3a_li">3 when we describe somebody's features:</text:p>
+              <text:p text:style-name="Standard"/>
+              <text:p text:style-name="dtb_3a_blockquote">He's got a long face and a small moustache.</text:p>
+              <text:p text:style-name="Standard"/>
+            </text:list-item>
+          </text:list>
+          <text:p text:style-name="Standard"/>
+        </wrapper>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
   <!-- ====================== -->
   <!-- INLINE ELEMENTS & TEXT -->
   <!-- ====================== -->
@@ -438,7 +510,7 @@
       <x:document type="inline">
         <wrapper>
           <text:p text:style-name="Standard">
-            <text:span text:style-name="dtb_3a_linenum">Z 15</text:span>
+            <text:span text:style-name="dtb_3a_linenum">Z15</text:span>
             Einsamkeit und Hummelgesumm.
           </text:p>
         </wrapper>
@@ -473,11 +545,11 @@
             Dann gibt es noch drei Katzen. Niko bekommt immer einen Schreck, wenn
           </text:p>
           <text:p text:style-name="dtb_3a_p">
-            Z 5 eine von ihnen um seine Beine streicht. Am schönsten findet er aber die Papageien.
+            Z5 eine von ihnen um seine Beine streicht. Am schönsten findet er aber die Papageien.
             Sie sitzen in einem Käfig, der über der Theke hängt. Einer der Papageien ist weiß,
           </text:p>
           <text:p text:style-name="dtb_3a_p">
-            Z 10 der andere quietschgrün. Manchmal kreischen sie.
+            Z10 der andere quietschgrün. Manchmal kreischen sie.
           </text:p>
         </wrapper>
       </x:document>
